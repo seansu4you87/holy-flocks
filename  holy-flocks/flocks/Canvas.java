@@ -153,18 +153,18 @@ public class Canvas extends JComponent
         myMoversToRemove.clear();
 
         // BUGBUG: fix for the racer program
-        ArrayList<Mover> racers = new ArrayList<Mover>();
-        for (Mover m : myMovers)
-        {
-            if (m instanceof unused.Racer)
-            {
-                racers.add(m);
-            }
-        }
-        if (racers.size() > 0)
-        {
-            colorLeadingRacer(racers);
-        }
+//        ArrayList<Mover> racers = new ArrayList<Mover>();
+//        for (Mover m : myMovers)
+//        {
+//            if (m instanceof unused.Racer)
+//            {
+//                racers.add(m);
+//            }
+//        }
+//        if (racers.size() > 0)
+//        {
+//            colorLeadingRacer(racers);
+//        }
     }
 
 
