@@ -4,7 +4,7 @@ import java.awt.*;
 
 import flocks.Mover;
 import flocks.PointD;
-import ignorethis.Canvas;
+import flocks.Canvas;
 
 
 /**
