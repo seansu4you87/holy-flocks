@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -49,7 +50,7 @@ public class SimulationViewer extends JApplet
     		System.getProperty("user.dir"));
 
     public SimulationViewer(){
-    	this("Title", new Dimension(100, 100));
+    	init();
     }
     
     public SimulationViewer(String title, Dimension size){
@@ -296,8 +297,21 @@ public class SimulationViewer extends JApplet
 	 * Displays program documentations
 	 */
 	protected void doHelp() {
-		// TODO 
+		JFrame frame = new JFrame("Help");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setPreferredSize(new Dimension(500, 500));
 		
+		JEditorPane editorPane = new JEditorPane();
+		editorPane.setEditable(false);
+		try {
+			editorPane.setPage(new URL("http://www.duk.edu/~zy9/cps108/Holy_Flocks_Documentation.html"));
+		} catch (IOException e) {
+		    showError("Attempted to read a bad URL: ");
+		}
+		JScrollPane scrollPane = new JScrollPane(editorPane);
+		frame.add(scrollPane);
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -326,10 +340,13 @@ public class SimulationViewer extends JApplet
 				file = myChooser.getSelectedFile();
 				myModel.initialize(new Scanner(file));
 			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(SimulationViewer.this, 
-						"Could not open " + file.getName());
+				showError("Could not open " + file.getName());
 			}
 		}       
+	}
+	
+	private void showError(String message){
+		JOptionPane.showMessageDialog(this, message);
 	}
 
 	/**
