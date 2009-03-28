@@ -23,8 +23,12 @@ public class Flock implements ISimulationComponent {
 	private List<String> myBehaviors;
 	private List<FlockMember> myMembers;
 	private String myName;
+	
+	public Flock(String name){
+		this(name, new ArrayList<String>());
+	}
 
-	public Flock(String name, List<String> behaviors) {
+	public Flock(String name, ArrayList<String> behaviors) {
 		myMembers = new ArrayList<FlockMember>();
 		myBehaviors = behaviors;
 		myName = name;

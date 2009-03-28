@@ -1,9 +1,13 @@
 package simulationFramework;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import javax.swing.*;
+
+import flocks.FlockFactory;
+import flocks.FlockMemberBall;
 
 import old.BouncerFactory;
 import old.Canvas;
@@ -15,7 +19,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -71,31 +77,7 @@ public class Applet extends JApplet {
 		// create user interface controls
 		makeMenus();
 		makeControlPanel();
-		makeDisplaySettings();
 		makeDebugControls();
-	}
-
-	private void makeDisplaySettings() {
-		JPanel settings = new JPanel();
-
-		JMenuItem addToSimulation = new JMenuItem("Add to Simulation...");
-		addToSimulation.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				doAddToSimulation();
-			}
-		});
-		settings.add(addToSimulation);
-
-		JMenuItem editSettings = new JMenuItem("Settings...");
-		editSettings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				doEditSettings();
-			}
-		});
-		settings.add(editSettings);
-
-		getContentPane().add(settings, BorderLayout.EAST);
-//		return settings;
 	}
 
 	/**
@@ -248,46 +230,101 @@ public class Applet extends JApplet {
 	 * Pop-up menu dialogue to create new flock members; Either add to existing
 	 * flock or create new flock; Specify color and shape of members to be
 	 * added;
+	 * 
+	 * made public so that helper methods have access to text area/combo box values
+	 * 
 	 */
-	private void doAddToSimulation() {
-		JDialog dialog = new JDialog();
-//	   JDialog dialog = (new JOptionPane()).createDialog("hi");
-	   dialog.setModal(true);
-	   dialog.setResizable(true);
-//	   dialog.setPreferredSize(getSize());
-	   JPanel creationPanel = new JPanel();
-
-		final Map<String, Factory> map = new HashMap<String, Factory>();
-		map.put("Circles", new BouncerFactory());
-		final JComboBox creatureMenu = new JComboBox(map.keySet().toArray());
-		creationPanel.add(creatureMenu);
-
-		final RangeSlider movers = new RangeSlider(MOVERS_LABEL, MIN_MOVERS,
-				MAX_MOVERS);
-		creationPanel.add(movers);
-
-		final RangeSlider trail = new RangeSlider(TRAIL_LABEL, MIN_TRAIL,
-				MAX_TRAIL);
-		creationPanel.add(trail);
-
-		JButton createButton = new JButton("Create Flock");
-		createButton.addActionListener(new ActionListener() {
+	public void doAddToSimulation() {
+		final JDialog dialog = new JDialog();
+		dialog.setTitle("Add Flock Members to Simulation");
+		dialog.setModal(true);
+		dialog.setResizable(true);
+		
+		List<String> numbers = new ArrayList<String>();
+		for(int k=1; k<=100; k++){
+			numbers.add(""+k);
+		}
+		
+		JPanel textPanel = new JPanel();
+		final JTextArea promptNumber = new JTextArea("Number of Members: ");
+		textPanel.add(promptNumber);
+		final JComboBox numberToAdd = new JComboBox(numbers.toArray());
+		textPanel.add(numberToAdd);
+		final JTextArea promptTrail = new JTextArea("Length of Trail: ");
+		textPanel.add(promptTrail);
+		final JComboBox trailSize = new JComboBox(numbers.subList(0, 10).toArray());
+		textPanel.add(trailSize);		
+		
+		JPanel comboBoxPanel = new JPanel();
+		final JTextArea promptShape = new JTextArea("Shape of Members: ");
+		comboBoxPanel.add(promptShape);
+		String[] shapes = {"Cricle", "Smiley"};
+		final JComboBox shape = new JComboBox(shapes);
+		comboBoxPanel.add(shape);
+		final JTextArea promptColor = new JTextArea("Color of Members: ");
+		comboBoxPanel.add(promptColor);
+		String[] colors = {"Green", "Yellow"};
+		final JComboBox color = new JComboBox(colors);
+		comboBoxPanel.add(color);
+		
+		JPanel buttonPanel = new JPanel();
+		JButton addToExistingFlock = new JButton("Add to Flock");
+		addToExistingFlock.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				myDisplay.clear();
-				String key = (String) creatureMenu.getSelectedItem();
-				map.get(key).createMovers(myDisplay, movers.getValue(),
-						trail.getValue());
-				myDisplay.repaint();
-				stop();
+				String flock = getFlockName();
+//				new FlockFactory().createFlockMembers(myModel, flock, numberToAdd.getSelectedIndex(),
+//						shape.getSelectedItem(), color, trailSize)
+				dialog.dispose();
+			}
+
+		});
+		buttonPanel.add(addToExistingFlock);
+		
+		JButton cancel = new JButton("Cancel");
+		cancel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				dialog.dispose();
 			}
 		});
-		creationPanel.add(createButton);
-	   dialog.add(creationPanel, BorderLayout.CENTER);
+		buttonPanel.add(cancel);
+		
+	   dialog.add(textPanel, BorderLayout.NORTH);
+	   dialog.add(comboBoxPanel, BorderLayout.CENTER);
+	   dialog.add(buttonPanel, BorderLayout.SOUTH);
+
 	   dialog.pack();
 	   dialog.setVisible(true);
 
 		
+	}
+
+
+	protected String getFlockName() {
+		final String[] existingFlocks = (String[]) myModel.getConstituents().toArray();
+		final JDialog getName = new JDialog();
+		getName.setTitle("Input Name of Flock: ");
+		final String result = "";
+		
+		final JComboBox namesBox = new JComboBox(existingFlocks);
+		namesBox.setEditable(true);
+		getName.add(namesBox);
+		
+		JButton ok = new JButton("OK");
+		ok.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				String name = (String) namesBox.getSelectedItem();
+				for(String flock : existingFlocks){
+					if(name.equals(flock)){
+						 result = name;
+						 break;
+					}
+				}
+				getName.dispose();
+			}
+			
+		});
+		
+		return null;
 	}
 
 	/**

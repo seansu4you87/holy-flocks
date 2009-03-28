@@ -2,6 +2,7 @@ package simulationFramework;
 
 import java.awt.Graphics;
 import java.io.FileWriter;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -12,6 +13,13 @@ import java.util.Scanner;
  * 
  */
 public interface ISimulationModel {
+	
+	/**
+	 * could not call "getComponents" because it conflicts with Container.getComponents()
+	 * @return
+	 */
+	public List<ISimulationComponent> getConstituents();
+	
 	/**
 	 * Remember given mover so it is painted on Canvas.
 	 * 
