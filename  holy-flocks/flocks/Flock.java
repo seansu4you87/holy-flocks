@@ -1,184 +1,111 @@
 package flocks;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
+import old.Mover;
+import old.PointD;
+import simulationFramework.ISimulationComponent;
+import simulationFramework.ISimulationModel;
 
 /**
- * creates a flock and models flock behavior
- * @author Weiping Zhang
- *
+ * models behavior of a flock keeps track of all members of the flock
+ * updates/paints the flock
+ * 
+ * @author Weiping Zhang, Sean Yu
+ * 
  */
-public class Flock 
-{
-	
-	private int mySize;	// # of members in flock
-	private List<Mover> myMembers;	// keeps track of members within flock
-	private Random rand = new Random();
-	
-	/**
-	 * 
-	 * 
-	 */
-	public Flock()
-	{
-	    myMembers = new ArrayList<Mover>();
-	    mySize = myMembers.size();
+public class Flock implements ISimulationComponent {
+	private List<String> myBehaviors;
+	private List<FlockMember> myMembers;
+	private String myName;
+
+	public Flock(String name, List<String> behaviors) {
+		myMembers = new ArrayList<FlockMember>();
+		myBehaviors = behaviors;
+		myName = name;
 	}
-	
-	public Flock(ArrayList<Mover> movers)
-	{
-	    myMembers = movers;
-	    mySize = movers.size();
+
+	public void add(ISimulationComponent component) {
+		myMembers.add((FlockMember) component);
 	}
-	
-	/*
-	 * adds member to the flock.
-	 */
-	public void add(Mover member)
-	{
-	    myMembers.add(member);
-	    mySize++;
-	}
-	
-	/**
-	 * updates behavior of flocks - check if this is the right location
-	 */
-	public void update()
-	{
-	    double totalX = 0;
-	    double totalY = 0;
-		for (Mover flockMember: myMembers)
-		{
-		    align(flockMember);
-		    if (getAnnulus(flockMember, 1.5 * flockMember.getSize().width, 3 * flockMember.getSize().width).size() > 0)
-		        cohere(flockMember);
-		    if (getNeighbors(flockMember, 1.5 * flockMember.getSize().width).size() > 1)
-		        separate(flockMember);
-		    totalX += flockMember.getVelocity().getX();
-		    totalY += flockMember.getVelocity().getX();
+
+	@Override
+	public PointD getCenter() {
+		PointD center = new PointD(0, 0);
+		for (FlockMember member : myMembers) {
+			center.translate(member.getCenter());
 		}
-		//System.out.println("X: " + (int)totalX + " Y: " + (int) totalY);
-	}
-	
-	public void separate(Mover member)
-	{
-	    double radius = 1.5 * member.getSize().width;
-	    ArrayList<Mover> neighbors = getNeighbors(member, radius);
-	    double size = (double) neighbors.size();
-//	    ArrayList<Point> distances = new ArrayList<Point>();
-	    double totalXVelocity = 0;
-	    double totalYVelocity = 0;
-	    
-	    for (Mover neighbor: neighbors)
-	    {
-	        double x = neighbor.getCenter().x - member.getCenter().x;
-	        double y = neighbor.getCenter().y - member.getCenter().y;
-	        //distances.add(new Point(x, y));
-	        totalXVelocity += x;
-	        totalYVelocity += y;
-	    }
-	    double xVelocity = -1 * totalXVelocity/size;
-	    double yVelocity = -1 * totalYVelocity/size;
-	    PointD velocity = member.getVelocity();
-	    member.setVelocity(new PointD(0.99 * velocity.getX() + 0.5 * xVelocity, 
-	                                  0.99 * velocity.getY() + 0.5 * yVelocity));
-	}
-	
-	public void align(Mover member)
-	{
-	    double totalXVelocity = 0;
-	    double totalYVelocity = 0;
-	    int radius = 3 * member.getSize().width;
-	    ArrayList<Mover> neighbors = getNeighbors(member, radius);
-        double size = (double) neighbors.size();
-	    if (size > 1)
-	    {
-	        for (Mover neighbor: neighbors)
-	        {
-	            totalXVelocity += neighbor.getVelocity().getX();
-	            totalYVelocity += neighbor.getVelocity().getY();
-	        }
-	        double xVelocity = totalXVelocity/size + rand.nextDouble() - rand.nextDouble();
-	        double yVelocity = totalYVelocity/size + rand.nextDouble() - rand.nextDouble();
-	        PointD velocity = member.getVelocity();
-	        if (xVelocity == 0)
-	        {
-	            System.out.println("x is zero");
-	            xVelocity = velocity.getX() + rand.nextDouble() - rand.nextDouble();
-	        }
-	        if (yVelocity == 0)
-	        {
-	            System.out.println("y is zero");
-	            yVelocity = velocity.getY() + rand.nextDouble() - rand.nextDouble();
-	        }
-	        member.setVelocity(new PointD((xVelocity + member.getVelocity().getX())/2, 
-	                                      (yVelocity + member.getVelocity().getY())/2));
-	    }
-	    
-	}
-	
-	public void cohere(Mover member)
-	{
-	    double minR = 1.5 * member.getSize().width;
-	    double maxR = 3 * member.getSize().width;
-	    ArrayList<Mover> annulus = getAnnulus(member, minR, maxR);
-	    if (annulus.size() > 0);
-	    {
-    	    double xTotal = 0;
-    	    double yTotal = 0;
-    	    double size = (double) annulus.size();
-    	    
-    	    for (Mover neighbor: annulus)
-    	    {
-    	        xTotal += neighbor.getCenter().x;
-    	        yTotal += neighbor.getCenter().y;
-    	    }
-    	    double avgX = xTotal/size;
-    	    double avgY = yTotal/size;
-    	    PointD velocity = member.getVelocity();
-    	    member.setVelocity(new PointD(velocity.getX() + 0.01 * (avgX - member.getCenter().getX()), 
-    	                                  velocity.getX() + 0.01 * (avgY - member.getCenter().getY())));
-	    }
-	}
-	
-	public ArrayList<Mover> getNeighbors(Mover member, double radius)
-	{
-	    ArrayList<Mover> neighbors = new ArrayList<Mover>();
-        for (Mover flockMember: myMembers)
-        {
-            if (member.getCenter().distance(flockMember.getCenter()) <= radius)
-            {
-                neighbors.add(flockMember);
-            }
-        }
-        
-        return neighbors;
-	}
-	
-	public ArrayList<Mover> getAnnulus(Mover member, double minR, double maxR)
-	{
-
-        ArrayList<Mover> minNeighbors = getNeighbors(member, minR);
-        ArrayList<Mover> maxNeighbors = getNeighbors(member, maxR);
-        ArrayList<Mover> annulus = new ArrayList<Mover>();
-        for (Mover neighbor: maxNeighbors)
-        {
-            if (!minNeighbors.contains(neighbor))
-            {
-                annulus.add(neighbor);
-            }
-        }
-        return annulus;
-	}
-	
-	/**
-	 * paints flocks to canvas
-	 */
-	public void paint()
-	{
-		
+		center.setLocation(center.getX() / myMembers.size(), center.getY()
+				/ myMembers.size());
+		return center;
 	}
 
+	@Override
+	public Color getColor() {
+		return myMembers.get(0).getColor();
+	}
+
+	public List<FlockMember> getMembers() {
+		return myMembers;
+	}
+
+	public String getName() {
+		return myName;
+	}
+
+	@Override
+	public PointD getVelocity() {
+		PointD velocity = new PointD(0, 0);
+		for (FlockMember member : myMembers) {
+			velocity.translate(member.getCenter());
+		}
+		velocity.setLocation(velocity.getX() / myMembers.size(), velocity
+				.getY()
+				/ myMembers.size());
+		return velocity;
+	}
+
+	@Override
+	public void paint(Graphics pen) {
+		for (FlockMember member : myMembers) {
+			member.paint(pen);
+		}
+	}
+
+	public void remove(ISimulationComponent component) {
+		myMembers.remove((FlockMember) component);
+	}
+
+	@Override
+	public void setColor(Color color) {
+		for (FlockMember member : myMembers) {
+			member.setColor(color);
+		}
+	}
+
+	public void setName(String name) {
+		myName = name;
+	}
+
+	@Override
+	public void update(ISimulationModel model) {
+		double totalX = 0;
+		double totalY = 0;
+		for (FlockMember member : myMembers) {
+			if (myBehaviors.contains("align"))
+				FlockBehavior.align(this, member);
+			if (myBehaviors.contains("cohere"))
+				FlockBehavior.cohere(this, member);
+			if (myBehaviors.contains("separate"))
+				FlockBehavior.separate(this, member);
+			totalX += member.getVelocity().getX();
+			totalY += member.getVelocity().getX();
+		}
+		// System.out.println("X: " + (int)totalX + " Y: " + (int) totalY);
+	}
 }
