@@ -2,6 +2,8 @@ package old;
 
 import java.awt.*;
 
+import simulationFramework.PointD;
+
 /**
  * Represents a ball that bounces around within the given bounds.
  * 

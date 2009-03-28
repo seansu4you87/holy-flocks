@@ -1,6 +1,7 @@
 package simulationFramework;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import javax.swing.*;
 
@@ -62,13 +63,39 @@ public class Applet extends JApplet {
 	 */
 	public void init(Dimension size, Canvas display) {
 		myDisplay = display;
+//		myModel = model;
+		
 		// create container to display animations
 		makeOutputDisplay(size);
 
 		// create user interface controls
 		makeMenus();
-		makeSimulationControls();
+		makeControlPanel();
+		makeDisplaySettings();
 		makeDebugControls();
+	}
+
+	private void makeDisplaySettings() {
+		JPanel settings = new JPanel();
+
+		JMenuItem addToSimulation = new JMenuItem("Add to Simulation...");
+		addToSimulation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				doAddToSimulation();
+			}
+		});
+		settings.add(addToSimulation);
+
+		JMenuItem editSettings = new JMenuItem("Settings...");
+		editSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				doEditSettings();
+			}
+		});
+		settings.add(editSettings);
+
+		getContentPane().add(settings, BorderLayout.EAST);
+//		return settings;
 	}
 
 	/**
@@ -113,7 +140,7 @@ public class Applet extends JApplet {
 	 * Create button panel to control simulation Buttons: start, stop, step,
 	 * clear
 	 */
-	private void makeSimulationControls() {
+	private void makeControlPanel() {
 		JPanel simulationControls = new JPanel();
 
 		JButton start = new JButton("Start");
@@ -223,8 +250,44 @@ public class Applet extends JApplet {
 	 * added;
 	 */
 	private void doAddToSimulation() {
-		// TODO
+		JDialog dialog = new JDialog();
+//	   JDialog dialog = (new JOptionPane()).createDialog("hi");
+	   dialog.setModal(true);
+	   dialog.setResizable(true);
+//	   dialog.setPreferredSize(getSize());
+	   JPanel creationPanel = new JPanel();
 
+		final Map<String, Factory> map = new HashMap<String, Factory>();
+		map.put("Circles", new BouncerFactory());
+		final JComboBox creatureMenu = new JComboBox(map.keySet().toArray());
+		creationPanel.add(creatureMenu);
+
+		final RangeSlider movers = new RangeSlider(MOVERS_LABEL, MIN_MOVERS,
+				MAX_MOVERS);
+		creationPanel.add(movers);
+
+		final RangeSlider trail = new RangeSlider(TRAIL_LABEL, MIN_TRAIL,
+				MAX_TRAIL);
+		creationPanel.add(trail);
+
+		JButton createButton = new JButton("Create Flock");
+		createButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				myDisplay.clear();
+				String key = (String) creatureMenu.getSelectedItem();
+				map.get(key).createMovers(myDisplay, movers.getValue(),
+						trail.getValue());
+				myDisplay.repaint();
+				stop();
+			}
+		});
+		creationPanel.add(createButton);
+	   dialog.add(creationPanel, BorderLayout.CENTER);
+	   dialog.pack();
+	   dialog.setVisible(true);
+
+		
 	}
 
 	/**
@@ -282,19 +345,21 @@ public class Applet extends JApplet {
 		JFrame frame = new JFrame("Help");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(500, 500));
+		frame.setSize(new Dimension(500, 500));
 
 		JEditorPane editorPane = new JEditorPane();
 		editorPane.setEditable(false);
 		try {
 			editorPane.setPage(new URL(
-					"http://www.duke.edu/~zy9/cps108/flocks.html"));
+					"http://www.uke.edu/~zy9/cps108/flocks.html"));
+			JScrollPane scrollPane = new JScrollPane(editorPane);
+			frame.add(scrollPane);
+			frame.pack();
+			frame.setVisible(true);
 		} catch (IOException e) {
 			showError("Attempted to read a bad URL: ");
 		}
-		JScrollPane scrollPane = new JScrollPane(editorPane);
-		frame.add(scrollPane);
-		frame.pack();
-		frame.setVisible(true);
+		
 	}
 
 	/**
@@ -305,7 +370,8 @@ public class Applet extends JApplet {
 			File file = myChooser.getSelectedFile();
 			try {
 				FileWriter fw = new FileWriter(file);
-				myModel.write(fw);
+				// TODO
+//				myModel.write(fw);
 				fw.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -319,12 +385,13 @@ public class Applet extends JApplet {
 	private void doOpen() {
 		if (myChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			File file = null;
-			try {
-				file = myChooser.getSelectedFile();
-				myModel.initialize(new Scanner(file));
-			} catch (FileNotFoundException e) {
-				showError("Could not open " + file.getName());
-			}
+			// TODO
+//			try {
+//				file = myChooser.getSelectedFile();
+//				myModel.initialize(new Scanner(file));
+//			} catch (FileNotFoundException e) {
+//				showError("Could not open " + file.getName());
+//			}
 		}
 	}
 

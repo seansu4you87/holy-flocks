@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import old.Mover;
-import old.PointD;
 import simulationFramework.ISimulationComponent;
 import simulationFramework.ISimulationModel;
+import simulationFramework.PointD;
 
 /**
  * models behavior of a flock keeps track of all members of the flock

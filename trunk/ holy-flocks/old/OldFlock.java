@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import simulationFramework.ISimulationModel;
 import simulationFramework.Applet;
+import simulationFramework.PointD;
 
 /**
  * creates a flock and models flock behavior

@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.io.FileWriter;
 import java.util.Scanner;
 
+
+
 /**
  * 
  * @author Weiping Zhang, Sean Yu
@@ -56,7 +58,7 @@ public interface ISimulationModel {
 	 * @param simulationViewer
 	 *            is view for this model
 	 */
-	public void setView(SimulationViewer simulationViewer);
+	public void setView(SimulationViewer view);
 
 	/**
 	 * Called by each step of timer, multiple times per second.
