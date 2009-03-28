@@ -13,24 +13,25 @@ import old.Canvas;
  * @author Weiping Zhang
  */
 public class SimulationViewer {
-	private ISimulationModel myModel;
-	private Canvas myDisplay;
+    private ISimulationModel myModel;
+    private Canvas myDisplay;
 
-	public SimulationViewer(String title, Dimension size) {
-		Applet app = new Applet();
-		app.init(size, myDisplay);
+    public SimulationViewer(String title, Dimension size) {
+	Applet app = new Applet();
+	app.init(size, myDisplay);
+	// app.init(size, myModel);
 
-		// create container that will work with Window manager
-		JFrame frame = new JFrame(title);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// add our user interface components to Frame and show it
-		frame.getContentPane().add(app, BorderLayout.CENTER);
-		frame.pack();
-		frame.setVisible(true);
-	}
+	// create container that will work with Window manager
+	JFrame frame = new JFrame(title);
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// add our user interface components to Frame and show it
+	frame.getContentPane().add(app, BorderLayout.CENTER);
+	frame.pack();
+	frame.setVisible(true);
+    }
 
-	public void setModel(ISimulationModel model) {
-		myModel = model;
-		myModel.setView(this);
-	}
+    public void setModel(ISimulationModel model) {
+	myModel = model;
+	myModel.setView(this);
+    }
 }

@@ -3,6 +3,8 @@ package old;
 import java.awt.*;
 import java.util.ArrayList;
 
+import simulationFramework.PointD;
+
 /**
  * Creates any number of Bouncer objects bouncing around the canvas.
  */

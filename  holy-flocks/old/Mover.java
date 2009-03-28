@@ -4,6 +4,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.LinkedList;
 
+import simulationFramework.PointD;
+
 /**
  * NAME : COURSE : CompSci 6 PURPOSE : Represents a shape that moves on its own
  */

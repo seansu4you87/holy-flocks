@@ -9,11 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-import old.PointD;
 
-import simulationFramework.ISimulationModel;
 import simulationFramework.ISimulationComponent;
+import simulationFramework.ISimulationModel;
 import simulationFramework.Applet;
+import simulationFramework.PointD;
 
 /**
  * models individual flock members evolved from BouncingBall in screensavers
@@ -27,7 +27,7 @@ public class FlockMember implements ISimulationComponent {
 	private Color myColor;
 	private int myMaxTrail;
 	private String myName;
-	protected Dimension mySize;
+	private Dimension mySize;
 	private List<PointD> myTrail;
 	private PointD myVelocity;
 
@@ -80,10 +80,6 @@ public class FlockMember implements ISimulationComponent {
 		if (myMaxTrail > 0) {
 			drawTrail(pen);
 		}
-		pen.setColor(myColor);
-		pen.fillOval((int) (myCenter.getX() - mySize.width / 2),
-				(int) (myCenter.getY() - mySize.height / 2), mySize.width,
-				mySize.height);
 	}
 
 	@Override
@@ -105,23 +101,6 @@ public class FlockMember implements ISimulationComponent {
 		myTrail.add(new PointD(myCenter));
 		if (myTrail.size() >= myMaxTrail) {
 			myTrail.remove(0);
-		}
-		Dimension bounds = model.getSize();
-
-		// check for move out of bounds on side walls
-		int radius = mySize.width / 2;
-		if (myCenter.getX() < 0) {
-			myCenter.setX(bounds.getWidth() - myCenter.getX());
-		} else if (myCenter.getX() > bounds.width) {
-			myCenter.setX(myCenter.getX() - bounds.width);
-		}
-
-		// check for move out of bounds on ceiling and floor
-		radius = mySize.height / 2;
-		if (myCenter.getY() < radius) {
-			myCenter.setY(bounds.getHeight() - myCenter.getY());
-		} else if (myCenter.getY() > bounds.height) {
-			myCenter.setY(myCenter.getY() - bounds.height);
 		}
 	}
 

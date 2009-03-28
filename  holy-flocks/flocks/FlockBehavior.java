@@ -2,9 +2,10 @@ package flocks;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 
 import old.Mover;
-import old.PointD;
+import simulationFramework.PointD;
 
 /**
  * static methods to determine how flock members behave in a flock
@@ -13,6 +14,7 @@ import old.PointD;
  * 
  */
 public class FlockBehavior {
+    private static Random rand = new Random();
 
 	public static void align(Flock flock, FlockMember member) {
 		double totalXVelocity = 0;

@@ -17,9 +17,9 @@ import javax.swing.border.BevelBorder;
 import old.FlockOld;
 import old.Mover;
 
+import simulationFramework.ISimulationComponent;
 import simulationFramework.ISimulationModel;
 import simulationFramework.Applet;
-import simulationFramework.ISimulationComponent;
 import simulationFramework.SimulationViewer;
 
 /**
