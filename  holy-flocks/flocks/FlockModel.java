@@ -37,9 +37,9 @@ public class FlockModel extends JComponent implements ISimulationModel {
 	private ISimulationComponent myCurrent;
 
 	// things to be animated
-	private List<ISimulationComponent> myFlocks;
+	private List<ISimulationComponent> myComponents;
 	// additional state for adding and removing of shapes during animation
-	private List<ISimulationComponent> myFlocksToRemove;
+	private List<ISimulationComponent> myComponentsToRemove;
 	// like a dice, generates a series of random numbers
 	private Random myGenerator;
 	private ListIterator<ISimulationComponent> myIterator;
@@ -50,15 +50,15 @@ public class FlockModel extends JComponent implements ISimulationModel {
 		setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		// initialize animation state
 		myGenerator = new Random();
-		myFlocks = new ArrayList<ISimulationComponent>();
-		myFlocksToRemove = new ArrayList<ISimulationComponent>();
-		myIterator = myFlocks.listIterator();
+		myComponents = new ArrayList<ISimulationComponent>();
+		myComponentsToRemove = new ArrayList<ISimulationComponent>();
+		myIterator = myComponents.listIterator();
 	}
 
 	@Override
 	public void add(ISimulationComponent component) {
 		if (myIterator == null)
-			myFlocks.add(component);
+			myComponents.add(component);
 		else
 			myIterator.add(component);
 	}
@@ -66,10 +66,10 @@ public class FlockModel extends JComponent implements ISimulationModel {
 	@Override
 	public void clear() {
 		if (myIterator == null)
-			myFlocks.clear();
+			myComponents.clear();
 		else
-			myFlocks.addAll(myFlocks);
-		myFlocks.clear();
+			myComponents.addAll(myComponents);
+		myComponents.clear();
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class FlockModel extends JComponent implements ISimulationModel {
 		pen.setColor(Color.WHITE);
 		pen.fillRect(0, 0, getSize().width, getSize().height);
 		// paint shapes to be animated
-		for (ISimulationComponent f : myFlocks) {
+		for (ISimulationComponent f : myComponents) {
 			f.paint(pen);
 		}
 	}
@@ -92,11 +92,11 @@ public class FlockModel extends JComponent implements ISimulationModel {
 	@Override
 	public void remove(ISimulationComponent component) {
 		if (myIterator == null)
-			myFlocks.remove(component);
+			myComponents.remove(component);
 		else if (myCurrent == component)
 			myIterator.remove();
 		else
-			myFlocksToRemove.add(component);
+			myComponentsToRemove.add(component);
 	}
 
 	@Override
@@ -106,16 +106,16 @@ public class FlockModel extends JComponent implements ISimulationModel {
 
 	@Override
 	public void update() {
-		for (ISimulationComponent f : myFlocks) {
+		for (ISimulationComponent f : myComponents) {
 			f.update(this);
 		}
 		// animate each mover, taking care to add or remove new ones
 		// appropriately
-		myIterator = myFlocks.listIterator();
+		myIterator = myComponents.listIterator();
 		while (myIterator.hasNext()) {
 			myCurrent = myIterator.next();
-			if (myFlocksToRemove.contains(myCurrent)) {
-				myFlocksToRemove.remove(myCurrent);
+			if (myComponentsToRemove.contains(myCurrent)) {
+				myComponentsToRemove.remove(myCurrent);
 				myIterator.remove();
 			} else {
 				myCurrent.update(this);
@@ -123,10 +123,23 @@ public class FlockModel extends JComponent implements ISimulationModel {
 		}
 		myIterator = null;
 		// clear out updates made during animation
-		for (ISimulationComponent current : myFlocksToRemove) {
-			myFlocks.remove(current);
+		for (ISimulationComponent current : myComponentsToRemove) {
+			myComponents.remove(current);
 		}
-		myFlocksToRemove.clear();
+		myComponentsToRemove.clear();
+	}
+	
+	/**
+	 * 
+	 */
+	public List<ISimulationComponent> getConstituents(){
+		List<ISimulationComponent> flocks = new ArrayList<ISimulationComponent>();
+		for(ISimulationComponent component : myComponents){
+			if(component instanceof Flock){
+				flocks.add((Flock) component);
+			}
+		}
+		return flocks;
 	}
 
 	@Override
