@@ -30,6 +30,10 @@ public class FlockMember implements ISimulationComponent {
 	private Dimension mySize;
 	private List<PointD> myTrail;
 	private PointD myVelocity;
+	
+	public FlockMember(String name){
+		myName = name;
+	}
 
 	public FlockMember(PointD center, PointD velocity, Dimension size,
 			Color color, String name, int trailSize) {

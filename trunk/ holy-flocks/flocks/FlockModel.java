@@ -53,6 +53,7 @@ public class FlockModel extends JComponent implements ISimulationModel {
 		myComponents = new ArrayList<ISimulationComponent>();
 		myComponentsToRemove = new ArrayList<ISimulationComponent>();
 		myIterator = myComponents.listIterator();
+		myComponents.add(new FlockMember("hi"));
 	}
 
 	@Override
