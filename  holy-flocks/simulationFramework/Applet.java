@@ -2,12 +2,15 @@ package simulationFramework;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import javax.swing.*;
 
+import flocks.Flock;
 import flocks.FlockFactory;
 import flocks.FlockMemberBall;
+import flocks.FlockModel;
 
 import old.BouncerFactory;
 import old.Canvas;
@@ -43,12 +46,14 @@ public class Applet extends JApplet {
 	public static final int DEFAULT_DELAY = 1000 / 25; // in milliseconds
 
 	// state
-	private ISimulationModel myModel;
-	private Canvas myDisplay;
+	private FlockModel myModel;
+//	private Canvas myDisplay;
 	private Timer myTimer = new Timer(DEFAULT_DELAY, new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
-			myDisplay.update();
-			myDisplay.repaint();
+//			myDisplay.update();
+//			myDisplay.repaint();
+			myModel.update();
+			myModel.repaint();
 		}
 	});
 	private JFileChooser myChooser = new JFileChooser(System
@@ -67,9 +72,9 @@ public class Applet extends JApplet {
 	/**
 	 * Initializes the applet --- called by main.
 	 */
-	public void init(Dimension size, Canvas display) {
-		myDisplay = display;
-//		myModel = model;
+	public void init(Dimension size, Canvas display, ISimulationModel model) {
+//		myDisplay = display;
+		myModel = (FlockModel)model;
 		
 		// create container to display animations
 		makeOutputDisplay(size);
@@ -104,11 +109,13 @@ public class Applet extends JApplet {
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				myDisplay.clear();
+//				myDisplay.clear();
+				myModel.clear();
 				String key = (String) creatureMenu.getSelectedItem();
-				map.get(key).createMovers(myDisplay, movers.getValue(),
-						trail.getValue());
-				myDisplay.repaint();
+//				map.get(key).createMovers(myDisplay, movers.getValue(),
+//						trail.getValue());
+//				myDisplay.repaint();
+				myModel.repaint();
 				stop();
 			}
 		});
@@ -144,8 +151,10 @@ public class Applet extends JApplet {
 		JButton step = new JButton("Step");
 		step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				myDisplay.update();
-				myDisplay.repaint();
+//				myDisplay.update();
+//				myDisplay.repaint();
+				myModel.update();
+				myModel.repaint();
 				stop();
 			}
 		});
@@ -155,7 +164,8 @@ public class Applet extends JApplet {
 		clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				start();
-				myDisplay.clear();
+//				myDisplay.clear();
+				myModel.clear();
 			}
 		});
 		simulationControls.add(clear);
@@ -170,14 +180,21 @@ public class Applet extends JApplet {
 	 * @param size
 	 */
 	private void makeOutputDisplay(Dimension size) {
-		myDisplay = new Canvas(size);
-		myDisplay.setPreferredSize(size);
-		myDisplay.setSize(size);
-		myDisplay.setFocusable(true);
-		myDisplay.requestFocus();
+		myModel = new FlockModel(size);
+		myModel.setPreferredSize(size);
+		myModel.setSize(size);
+		myModel.setFocusable(true);
+		myModel.requestFocus();
+//		myDisplay = new Canvas(size);
+//		myDisplay.setPreferredSize(size);
+//		myDisplay.setSize(size);
+//		myDisplay.setFocusable(true);
+//		myDisplay.requestFocus();
 
 		// add our user interface components to applet
-		getContentPane().add(myDisplay, BorderLayout.CENTER);
+//		getContentPane().add(myDisplay, BorderLayout.CENTER);
+//	}
+		getContentPane().add(myModel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -198,7 +215,7 @@ public class Applet extends JApplet {
 	private JMenu makeSimulationMenu() {
 		JMenu simulation = new JMenu("Simulation");
 
-		JMenuItem addToSimulation = new JMenuItem("Add to Simulation...");
+		JMenuItem addToSimulation = new JMenuItem("Create New Flock...");
 		addToSimulation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				doAddToSimulation();
@@ -234,46 +251,69 @@ public class Applet extends JApplet {
 	 * made public so that helper methods have access to text area/combo box values
 	 * 
 	 */
-	public void doAddToSimulation() {
+	private void doAddToSimulation() {
 		final JDialog dialog = new JDialog();
-		dialog.setTitle("Add Flock Members to Simulation");
+		dialog.setTitle("Add New Flock to Simulation");
 		dialog.setModal(true);
 		dialog.setResizable(true);
 		
-		List<String> numbers = new ArrayList<String>();
-		for(int k=1; k<=100; k++){
-			numbers.add(""+k);
+		List<Integer> numbers = new ArrayList<Integer>();
+		for(int k=0; k<=255; k++){
+			numbers.add(k);
 		}
 		
-		JPanel textPanel = new JPanel();
+		JPanel optionsPanel = new JPanel();
+		
 		final JTextArea promptNumber = new JTextArea("Number of Members: ");
-		textPanel.add(promptNumber);
-		final JComboBox numberToAdd = new JComboBox(numbers.toArray());
-		textPanel.add(numberToAdd);
+		promptNumber.setEditable(false);
+		optionsPanel.add(promptNumber);
+		
+		final JComboBox numberToAdd = new JComboBox(numbers.subList(1, 101).toArray());
+		optionsPanel.add(numberToAdd);
+		
 		final JTextArea promptTrail = new JTextArea("Length of Trail: ");
-		textPanel.add(promptTrail);
-		final JComboBox trailSize = new JComboBox(numbers.subList(0, 10).toArray());
-		textPanel.add(trailSize);		
+		promptTrail.setEditable(false);
+		optionsPanel.add(promptTrail);
 		
-		JPanel comboBoxPanel = new JPanel();
+		final JComboBox trailToAdd = new JComboBox(numbers.subList(1, 11).toArray());
+		optionsPanel.add(trailToAdd);		
+		
 		final JTextArea promptShape = new JTextArea("Shape of Members: ");
-		comboBoxPanel.add(promptShape);
-		String[] shapes = {"Cricle", "Smiley"};
-		final JComboBox shape = new JComboBox(shapes);
-		comboBoxPanel.add(shape);
-		final JTextArea promptColor = new JTextArea("Color of Members: ");
-		comboBoxPanel.add(promptColor);
-		String[] colors = {"Green", "Yellow"};
-		final JComboBox color = new JComboBox(colors);
-		comboBoxPanel.add(color);
+		promptShape.setEditable(false);
+		optionsPanel.add(promptShape);
 		
+		String[] shapes = {"Cricle", "Smiley"};
+		final JComboBox shapeToAdd = new JComboBox(shapes);
+		optionsPanel.add(shapeToAdd);
+		
+		final JTextArea promptColor = new JTextArea("Color of Members: ");
+		promptColor.setEditable(false);
+		optionsPanel.add(promptColor);
+		
+		final JComboBox colorToAdd = new JComboBox(numbers.subList(0, 256).toArray());
+		optionsPanel.add(colorToAdd);
+		
+		JPanel namePanel = new JPanel();
+		
+		JTextArea promptName = new JTextArea("Enter Name of New Flock: ");
+		promptName.setEditable(false);
+		namePanel.add(promptName);
+		
+		final JTextField flockName = new JTextField(20);
+		namePanel.add(flockName);
+
 		JPanel buttonPanel = new JPanel();
-		JButton addToExistingFlock = new JButton("Add to Flock");
+		JButton addToExistingFlock = new JButton("Add");
 		addToExistingFlock.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				String flock = getFlockName();
-//				new FlockFactory().createFlockMembers(myModel, flock, numberToAdd.getSelectedIndex(),
-//						shape.getSelectedItem(), color, trailSize)
+				String name = flockName.getText();
+				int number = (Integer) numberToAdd.getSelectedItem();
+				String shape = (String) shapeToAdd.getSelectedItem();
+				int color = (Integer) colorToAdd.getSelectedItem();
+				int trailSize = (Integer) trailToAdd.getSelectedItem();
+				myModel.clear();
+				FlockFactory.createFlockMembers(myModel, name, number, shape, color, trailSize);
+				((Component) myModel).repaint();
 				dialog.dispose();
 			}
 
@@ -287,9 +327,9 @@ public class Applet extends JApplet {
 			}
 		});
 		buttonPanel.add(cancel);
-		
-	   dialog.add(textPanel, BorderLayout.NORTH);
-	   dialog.add(comboBoxPanel, BorderLayout.CENTER);
+
+		dialog.add(namePanel, BorderLayout.NORTH);
+	   dialog.add(optionsPanel, BorderLayout.CENTER);
 	   dialog.add(buttonPanel, BorderLayout.SOUTH);
 
 	   dialog.pack();
@@ -299,33 +339,7 @@ public class Applet extends JApplet {
 	}
 
 
-	protected String getFlockName() {
-		final String[] existingFlocks = (String[]) myModel.getConstituents().toArray();
-		final JDialog getName = new JDialog();
-		getName.setTitle("Input Name of Flock: ");
-		final String result = "";
-		
-		final JComboBox namesBox = new JComboBox(existingFlocks);
-		namesBox.setEditable(true);
-		getName.add(namesBox);
-		
-		JButton ok = new JButton("OK");
-		ok.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				String name = (String) namesBox.getSelectedItem();
-				for(String flock : existingFlocks){
-					if(name.equals(flock)){
-						 result = name;
-						 break;
-					}
-				}
-				getName.dispose();
-			}
-			
-		});
-		
-		return null;
-	}
+	
 
 	/**
 	 * Creates file menu containing buttons to open/save files, help
@@ -388,7 +402,7 @@ public class Applet extends JApplet {
 		editorPane.setEditable(false);
 		try {
 			editorPane.setPage(new URL(
-					"http://www.uke.edu/~zy9/cps108/flocks.html"));
+					"/www.duke.edu/~zy9/cps108/flocks.html"));
 			JScrollPane scrollPane = new JScrollPane(editorPane);
 			frame.add(scrollPane);
 			frame.pack();

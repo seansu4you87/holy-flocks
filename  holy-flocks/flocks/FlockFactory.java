@@ -15,12 +15,12 @@ public class FlockFactory {
 	
 	public static final List<String> numbers = new ArrayList<String>();
 	
-	for(int k=1; k<=100; k++){
-		numbers.add(""+k);
-	}
+//	for(int k=1; k<=100; k++){
+//		numbers.add(""+k);
+//	}
 	
-    public static void createFlockMembers(ISimulationModel model, String flock, String numberToAdd, 
-    		String shape, Color color, String trailSize){
+    public static void createFlockMembers(ISimulationModel model, String flock, int numberToAdd, 
+    		String shape, int color, int trailSize){
     	
     }
 }

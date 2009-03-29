@@ -18,7 +18,7 @@ public class SimulationViewer {
 
     public SimulationViewer(String title, Dimension size) {
 	Applet app = new Applet();
-	app.init(size, myDisplay);
+	app.init(size, myDisplay, myModel);
 	// app.init(size, myModel);
 
 	// create container that will work with Window manager
