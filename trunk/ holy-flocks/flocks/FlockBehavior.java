@@ -2,10 +2,13 @@ package flocks;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 import old.Mover;
 import simulationFramework.PointD;
+import yourwork.Velocity;
 
 /**
  * static methods to determine how flock members behave in a flock
@@ -91,8 +94,7 @@ public class FlockBehavior {
 		return annulus;
 	}
 
-	public static ArrayList<FlockMember> getNeighbors(Flock flock,
-			FlockMember member, double radius) {
+	public static ArrayList<FlockMember> getNeighbors(Flock flock, FlockMember member, double radius) {
 		ArrayList<FlockMember> neighbors = new ArrayList<FlockMember>();
 		for (FlockMember flockMember : flock.getMembers()) {
 			if (member.getCenter().distance(flockMember.getCenter()) <= radius) {
@@ -129,4 +131,48 @@ public class FlockBehavior {
 					* xVelocity, 0.99 * velocity.getY() + 0.5 * yVelocity));
 		}
 	}
+	
+	public static PointD getAveragePosition(List<Mover> movers) {
+	        double totalX = 0;
+	        double totalY = 0;
+	        double total = (double) movers.size();
+	        for (Mover shape: movers)
+	        {
+	            totalX += shape.getCenter().getX();
+	            totalY += shape.getCenter().getY();
+	        }
+	        PointD result = new PointD(totalX / total, totalY / total);
+	        return result;
+	    }
+	
+	public static void cohere2(Flock flock, FlockMember, member)
+    {
+	    ArrayList<FlockMember> myMembers = new ArrayList<FlockMember>();
+        TreeMap<Double, FlockMember> distances = new TreeMap<Double, FlockMember>();
+        for (int i = 0; i<myMembers.size(); i++)
+        {
+            Double distance = member.getCenter().distance(myMembers.get(i).getCenter());
+            distances.put(distance, myMembers.get(i));
+        }
+        ArrayList<FlockMember> closestMembers = new ArrayList<FlockMember>();
+        int max;
+        if (myMembers.size() < 10)
+        {
+            max = myMembers.size();
+        }
+        else
+        {
+            max = 10;
+        }
+        for (int i = 0; i < max ; i++)
+        {
+            closestMembers.add(distances.get(distances.firstKey()));
+            distances.remove(distances.firstKey());
+        }
+        PointD averagePosition = getAveragePosition(closestMembers);
+        PointD cohereVelocity = member.getCenter().getVelocityVector(averagePosition);
+        PointD velocity = member.getVelocity();
+        member.setVelocity(new PointD(0.5 * (velocity.getX() + cohereVelocity.getX()), 
+                                      0.5 * (velocity.getY() + cohereVelocity.getY())));
+    }
 }
