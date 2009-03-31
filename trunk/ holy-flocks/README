@@ -1,0 +1,45 @@
+Name: Weiping Zhang
+Date Started: 1/9/2009
+Date Finished: 1/14/2009
+Hours Spent: 15-20hrs
+Discussed with: Sean Yu, Ga-Young Joung, Perry Zheng, Henry Qin, Zhichao Han
+References: Code Smells by Beck and Fowler
+
+Description of files:
+started with Bins.java and Disk.java; Bins was refactored to have shorter
+methods and more readability and maintainability, while Disk was left as is.
+JUnit tests were written for these, the BinsTest and DiskTest .java files
+respectively. All test cases work for the 2 classes. Used example.txt as testing data for JUnit testing of Bins.
+
+Assignment was pretty vague. How should we refactor? What are some general
+conventions or rules of thumbs? Only basis was from the Code Smells article,
+but harder to apply to actual code, and examples would've been helpful. Then
+again, that might have been the intent of the assignment, to learn from mistakes,
+so in the long run will have better grasp.
+
+CS 100 Bin-Packing Code:
+The steps are clearly written, it is not hard to understand individual lines of code.
+However as a whole it is not quite clear what exactly the lines combine to do. Alot of
+calculations are done, but are not really at all related. Comments might be helpful
+to explain the purpose of certain lines, or what the calculations will be used to show.
+It is sufficient for a tutorial because it contains the algorithm for how to pack bins.
+The code clearly shows how the bins are packed, but there is not really a higher-level
+outline of what the program will perform next. Because the code is all in one method,
+to test the only way would be to run the entire program, with simple data that one can
+determine the results easily by hand, to verify the results.
+
+Bin-Packing Complete Program:
+This code satisfies the assignment requirements by running both methods and outputting data
+size as well as number of disks used in each method. Comments would be helpful to differentiate
+different parts of the code that serve separate functions. For example, a comment would be helpful
+to distinguish when the worst-fit method is finished and the worst-fit decreasing method begins.
+also, parts of code are not explicit, for example the priority queue being cleared through printing
+without an explicit "pq.clear()" command.  Writing this code should be fairly simple, but debugging
+would be much harder because the only way to test is by running the whole program, and if a bug
+appears would have to inspect everything, making sure nothing is left un-considered. In this way
+debugging can become quite tedious and time consuming. it would be a good idea to have each of the
+packing algorithms in its own method, so it would be clear and explicit where and when each is called.
+also, this way would make it easy to add additional methods. it also would be helpful to write special
+methods that printed the results or filled the priority queue, functions that may be used more than once
+during the program. No additional classes seem necessary, but having some instance variables may be helpful
+to avoid passing many parameters back and forth between methods.
