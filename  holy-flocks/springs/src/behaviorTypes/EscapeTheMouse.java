@@ -12,7 +12,6 @@ import creators.VelocityInfo;
  */
 public class EscapeTheMouse implements Behavior {
 
-	@Override
 	public void computeNewVelocity(Mover m, VelocityInfo v) 
 	{
 		Point difference = new Point(m.getCenter().x - v.getMyMousePosition().x, m.getCenter().y - v.getMyMousePosition().y);

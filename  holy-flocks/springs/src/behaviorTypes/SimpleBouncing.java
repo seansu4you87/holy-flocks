@@ -13,7 +13,6 @@ import creators.VelocityInfo;
  */
 public class SimpleBouncing implements Behavior {
 
-	@Override
 	public void computeNewVelocity(Mover m, VelocityInfo v) 
 	{
 		int radius = m.getSize().width / 2;
