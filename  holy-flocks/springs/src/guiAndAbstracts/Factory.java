@@ -1,0 +1,52 @@
+package guiAndAbstracts;
+
+
+import java.awt.Point;
+import java.util.*;
+
+import constantsFiles.*;
+import reflection.*;
+/**
+ * An abstract command class that creates Mover subclasses.
+ * 
+ * @author Robert C Duvall
+ */
+public abstract class Factory implements Constants
+{
+    // name of this factory
+    private String myName;
+
+
+    /**
+     * Create a factory with the given name.
+     * 
+     * @param name of this factory
+     */
+    public Factory (String name)
+    {
+        myName = name;
+    }
+
+
+    /**
+     * Reports the name of this factory 
+     * (displayed on the button used to activate it)
+     * 
+     * @return name of this factory
+     */
+    public String getName ()
+    {
+        return myName;
+    }
+
+
+    /**
+     * Subclasses determine how to create the movers and add them to the canvas
+     * 
+     * @param target canvas that will display created movers
+     * @param number number of movers to create
+     * @param trailSize number of steps to draw in the trail
+     */
+    public abstract List<Individual> createMovers (Canvas target, SliderProperties information);
+    
+}
