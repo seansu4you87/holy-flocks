@@ -284,4 +284,61 @@ public class Mover extends Individual implements Constants
 	{
 		this.myIsPainting = isPainting;
 	}
+	
+	/**
+     * Returns shape's left-most coordinate.
+     */
+    public int getLeft ()
+    {
+        return getCenter().x - getSize().width / 2;
+    }
+
+    
+    /**
+     * Returns shape's top-most coordinate.
+     */
+    public int getTop ()
+    {
+        return getCenter().y - getSize().height / 2;
+    }
+
+
+    /**
+     * Returns shape's right-most coordinate.
+     */
+    public int getRight ()
+    {
+        return getCenter().x + getSize().width / 2;
+    }
+
+
+    /**
+     * Reports shape's bottom-most coordinate.
+     *
+     * @return bottom-most coordinate
+     */
+    public int getBottom ()
+    {
+        return getCenter().y + getSize().height / 2;
+    }
+    
+    public void setVelocity(Point velocity)
+    {
+        myVelocity = new Point(velocity.x, velocity.y);
+    }
+    
+    public void setVelocity(int x, int y)
+    {
+        setVelocity(new Point(x, y));
+    }
+    
+    public void setCenter(Point center)
+    {
+        myCenter = new Point(center.x, center.y);
+    }
+    
+    public void setCenter(int x, int y)
+    {
+        setCenter(new Point(x, y));
+    }
 }

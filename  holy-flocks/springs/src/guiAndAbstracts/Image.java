@@ -3,7 +3,6 @@ package guiAndAbstracts;
 import java.awt.*;
 import javax.swing.ImageIcon;
 
-import creators.Flock;
 import creators.Mover;
 import creators.VelocityInfo;
 import behaviorTypes.*;
@@ -19,7 +18,7 @@ import java.util.*;
 public class Image extends Mover
 {
     private java.awt.Image myImage;
-
+    private double myAngle;
     
     /**
      * Construct a shape at the given position, with the given size and
@@ -60,6 +59,23 @@ public class Image extends Mover
     {
         myImage = new ImageIcon(getClass().getResource("/" + fileName)).getImage();
     }
+    
+    /**
+     * Set this shape's angle to the given value (in degrees).
+     */
+    public void setAngle (double degrees)
+    {
+        myAngle = degrees;
+    }
+    
+
+    /**
+     * Return this shape's angle (in degrees).
+     */
+    public double getAngle ()
+    {
+        return myAngle;
+    }
 
 
     /**
@@ -69,11 +85,17 @@ public class Image extends Mover
      */
     public void paint (Graphics pen)
     {
+     // rotate image appropriately based on its angle
+        Graphics2D pen2D = (Graphics2D)pen;
+        pen2D.translate(getCenter().x, getCenter().y);
+        pen2D.rotate(Math.toRadians(myAngle));
         pen.drawImage(myImage,
-                      getCenter().x - getSize().width / 2, 
-					  getCenter().y - getSize().height / 2,
+                      -getSize().width / 2, 
+                      -getSize().height / 2,
                       getSize().width, getSize().height,
                       null);
+        pen2D.rotate(-Math.toRadians(myAngle));
+        pen2D.translate(-getCenter().x, -getCenter().y);
     }
     //TODO: convert
     public void computeNewVelocity(VelocityInfo v)
