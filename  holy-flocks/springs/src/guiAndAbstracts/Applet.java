@@ -156,6 +156,7 @@ public class Applet extends JApplet implements Constants
         commands.add(new AttractorFactory(myResources.getString("MakeAttractor")), myDisplay, this);
         commands.add(new SwarmFactory(myResources.getString("MakeSwarm")), myDisplay, this);
         commands.add(new FlockMemberFactory(myResources.getString("MakeFlock")), myDisplay, this);
+        commands.add(new SpringFactory(myResources.getString("MakeSpring")), myDisplay, this);
         return commands;
     }
     
