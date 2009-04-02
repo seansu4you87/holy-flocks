@@ -16,9 +16,9 @@ public class SpringFactory extends Factory implements Constants
     /**
      * Construct factory.
      */
-    public SpringFactory ()
+    public SpringFactory (String label)
     {
-        super("Create Springs");
+        super(label);
     }
 
 
