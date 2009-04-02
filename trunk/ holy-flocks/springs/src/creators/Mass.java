@@ -3,6 +3,9 @@ package creators;
 import guiAndAbstracts.Canvas;
 import guiAndAbstracts.Image;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import behaviorTypes.*;
 
 
 /**
@@ -21,6 +24,7 @@ public class Mass extends Image
     public Mass (Point center, Dimension size, Color color, double mass)
     {
         super(center, size, new Point(), "images/mass.gif", null, 0);
+        ArrayList<Behavior> crap = new ArrayList<Behavior>();
         myMass = mass;
         myForce = new Force();
         myPreciseVelocity = new Force();
