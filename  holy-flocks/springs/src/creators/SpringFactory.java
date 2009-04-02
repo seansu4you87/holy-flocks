@@ -37,7 +37,7 @@ public class SpringFactory extends Factory implements Constants
         int number = information.getNumberObjects();
         Dimension bounds = canvas.getSize();
         
-        for (int i = 0; i < number/100; i++)
+        for (int i = 0; i < number/50; i++)
         {
             int size = canvas.nextIntInRange(MIN_SIZE, MAX_SIZE);
             masses.add(new Mass(new Point(canvas.nextIntInRange(size / 2, bounds.width - size / 2),
