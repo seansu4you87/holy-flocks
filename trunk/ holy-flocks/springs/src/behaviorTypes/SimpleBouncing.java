@@ -15,6 +15,7 @@ public class SimpleBouncing implements Behavior {
 
 	public void computeNewVelocity(Mover m, VelocityInfo v) 
 	{
+	    System.out.println("simplebouncing behavior being called");
 		int radius = m.getSize().width / 2;
 		//check for move out of bounds on both walls
 		if (m.getCenter().x < radius)

@@ -15,23 +15,21 @@ import behaviorTypes.*;
 public class Mass extends Image
 {
     private Force GRAVITY = new Force(90, 1);
-
     private Force myPreciseVelocity;
     private Force myForce;
     private double myMass;
 
 
-    public Mass (Point center, Dimension size, Color color, double mass)
+    public Mass (Point center, Dimension size, Color color, double mass, Collection<Behavior> behaviors, int id)
     {
-        super(center, size, new Point(), "images/mass.gif", null, 0);
-        ArrayList<Behavior> crap = new ArrayList<Behavior>();
+        super(center, size, new Point(), "images/mass.gif", behaviors, id);
         myMass = mass;
         myForce = new Force();
         myPreciseVelocity = new Force();
+        myBehaviors.add(new Springing());
     }
 
-
-    public void update (Canvas canvas)
+   /* public void update (Canvas canvas)
     {
         // add gravity towards bottom
         myForce.add(GRAVITY);
@@ -68,6 +66,21 @@ public class Mass extends Image
         setVelocity((int)Math.round(myPreciseVelocity.getXChange()),
                     (int)Math.round(myPreciseVelocity.getYChange()));
         super.update(canvas);
+    }*/
+    
+    public Force getForce()
+    {
+        return myForce;
+    }
+    
+    public Force getPreciseVelocity()
+    {
+        return myPreciseVelocity;
+    }
+    
+    public double getMass()
+    {
+        return myMass;
     }
 
 
