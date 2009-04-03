@@ -46,29 +46,19 @@ public class SpringFactory extends Factory implements Constants
                                           new Color(canvas.nextIntInRange(0, 255),
                                                     canvas.nextIntInRange(0, 255),
                                                     canvas.nextIntInRange(0, 255)),
-                                          canvas.nextIntInRange(0, 10)));
+                                          canvas.nextIntInRange(0, 10),
+                                          information.getBehaviors(),
+                                          i));
         }
         for (Mass m1: masses)
         {
             for (Mass m2: masses)
             {
-                individualList.add(new Spring(m1, m2, 100, 0.005));
+                int length = canvas.nextIntInRange(100, 150);
+                individualList.add(new Spring(m1, m2, length, 0.005));
             }
             individualList.add(m1);
         }
-        // create an initial scenario to animate
-        /*masses.add(new Mass (new Point(100, 100), new Dimension(50, 50), Color.GREEN, 5));
-        masses.add(new Mass(new Point(300, 100), new Dimension(50, 50), Color.RED, 7));
-        masses.add(new Mass(new Point(200, 300), new Dimension(50, 50), Color.MAGENTA, 10));
-        masses.add(new Mass(new Point(200, 300), new Dimension(50, 50), Color.MAGENTA, 10));
-        individualList.add(new Spring(masses.get(0), masses.get(1), 150, 0.005));
-        individualList.add(new Spring(masses.get(0), masses.get(2), 100, 0.005));
-        individualList.add(new Spring(masses.get(1), masses.get(2), 100, 0.005));
-        
-        for (Individual m : masses)
-        {
-            individualList.add(m);
-        }*/
         return individualList;
     }
 }
