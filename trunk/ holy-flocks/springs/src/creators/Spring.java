@@ -35,7 +35,9 @@ public class Spring extends Image
                             myK * (myLength - Force.distanceBetween(dx, dy)));
         myStart.applyForce(f);
         myEnd.applyForce(f.negate());
-
+        
+        myStart.update(canvas);
+        myEnd.update(canvas);
         // update spring values based on attached masses
         setCenter((start.x + end.x) / 2, (start.y + end.y) / 2);
         setSize((int)start.distance(end), 20);
