@@ -53,7 +53,7 @@ public class SpringFactory extends Factory implements Constants
             for (Mass m2: masses)
             {
                 int length = canvas.nextIntInRange(100, 150);
-                //individualList.add(new Spring(m1, m2, length, 0.005));
+                individualList.add(new Spring(m1, m2, length, 0.005));
             }
             individualList.add(m1);
         }
