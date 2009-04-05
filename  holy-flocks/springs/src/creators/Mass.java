@@ -20,7 +20,7 @@ public class Mass extends Image
     private double myMass;
 
 
-    public Mass (Point center, Dimension size, Color color, double mass, Collection<Behavior> behaviors, int id)
+    public Mass (Point center, Dimension size, double mass, Collection<Behavior> behaviors, int id)
     {
         super(center, size, new Point(), "images/mass.gif", behaviors, id);
         myMass = mass;
