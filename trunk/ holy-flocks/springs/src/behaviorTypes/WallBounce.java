@@ -1,34 +1,23 @@
 package behaviorTypes;
 
-import java.awt.Point;
-
 import creators.Force;
 import creators.Mass;
 import creators.Mover;
 import creators.VelocityInfo;
 
 /**
- * Behavior to spring
- * @author seansu4you87
+ * Behavior to simulate the masses being repelled by the walls
+ * @author Sean Yu, Weiping Zhang
  *
  */
-public class Springing implements Behavior
+public class WallBounce implements Behavior
 {
-    private Force GRAVITY = new Force(90, 1);
 
     public void computeNewVelocity (Mover m, VelocityInfo v)
     {
-        System.out.println("computeNewVelocity from springing is being called");
+        System.out.println("WallBounce");
         Mass mass = (Mass) m;
-        Force myForce = mass.getForce();
         Force myPreciseVelocity = mass.getPreciseVelocity();
-        double myMass = mass.getMass();
-        
-        myForce.add(GRAVITY);
-        myForce.scale(1.0 / myMass);
-        myPreciseVelocity.add(myForce);
-        myForce.reset();
-
         // check for move out of bounds
         Force impulse = new Force();
         if (mass.getLeft() < 0)
@@ -53,13 +42,9 @@ public class Springing implements Behavior
         }
         impulse.scale(myPreciseVelocity.getRelativeMagnitude(impulse));
         myPreciseVelocity.add(impulse);
-
-        // convert force back into Mover's velocity
-        //m.setVelocity((int)Math.round(myPreciseVelocity.getXChange()),
-        //            (int)Math.round(myPreciseVelocity.getYChange()));
+        
         m.getVelocity().x = (int)Math.round(myPreciseVelocity.getXChange());
         m.getVelocity().y = (int)Math.round(myPreciseVelocity.getXChange());
-        
     }
 
 }
