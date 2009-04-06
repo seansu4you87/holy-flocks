@@ -97,7 +97,4 @@ public class Image extends Mover
         pen2D.rotate(-Math.toRadians(myAngle));
         pen2D.translate(-getCenter().x, -getCenter().y);
     }
-    //TODO: convert
-    public void computeNewVelocity(VelocityInfo v)
-	{}
 }

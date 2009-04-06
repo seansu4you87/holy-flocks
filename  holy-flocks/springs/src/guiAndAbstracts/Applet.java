@@ -31,7 +31,9 @@ import constantsFiles.*;
 /**
  * Creates an applet that be viewed over the web.
  *
- * @author David Eitel, Eric Wheeler, Robert C. Duvall
+ *
+ *Added Create Springs and Add Assembly buttons.  Added method addAssembly
+ * @author David Eitel, Eric Wheeler, Robert C. Duvall, Sean Yu, Weiping Zhang
  */
 @SuppressWarnings("serial")
 public class Applet extends JApplet implements Constants
@@ -165,6 +167,10 @@ public class Applet extends JApplet implements Constants
     {
     	//add individual
     	ButtonPanel utility = new ButtonPanel(myDisplay, mySliderMap);
+    	
+    	JButton addAssembly = new JButton(myResources.getString("MakeAssembly"));
+    	//need to define GUI_ADD_ASSEMBLY
+    	addActionListenerForMenuItem(addAssembly, this, GUI_ADD_ASSEMBLY, DEFAULT_AL_ARGS);
         JButton addIndividual = new JButton(myResources.getString("MakeIndividual"));
         addActionListenerForMenuItem(addIndividual, this, GUI_ADD_INDIVIDUAL, DEFAULT_AL_ARGS);        
         
@@ -175,6 +181,7 @@ public class Applet extends JApplet implements Constants
         //clear
         JButton clear = new JButton(myResources.getString("Clear"));
         addActionListenerForMenuItem(clear, this, GUI_CLEAR, DEFAULT_AL_ARGS);
+        utility.add(addAssembly);
         utility.add(addIndividual);
         utility.add(addGroup);
         utility.add(clear);
@@ -209,8 +216,8 @@ public class Applet extends JApplet implements Constants
     	menuBar.add(makeFormationsMenu());
     	return menuBar;
     }
-    
-    /**
+
+	/**
      * makes file menu
      * @return JMenu with file options.
      */
@@ -304,6 +311,18 @@ public class Applet extends JApplet implements Constants
         JCheckBox escape = new JCheckBox(myResources.getString("EscapeMouseBehavior"));
         addActionListenerForMenuItem(escape, this, GUI_TOGGLE_BEHAVIOR, ESCAPE_MOUSE);
         boxList.add(escape);
+        JCheckBox viscosity = new JCheckBox(myResources.getString("ViscocityBehavior"));
+        addActionListenerForMenuItem(viscosity, this, GUI_TOGGLE_BEHAVIOR, VISCOSITY);
+        boxList.add(viscosity);
+        JCheckBox gravity = new JCheckBox(myResources.getString("GravityBehavior"));
+        addActionListenerForMenuItem(gravity, this, GUI_TOGGLE_BEHAVIOR, GRAVITY);
+        boxList.add(gravity);
+        JCheckBox wallBounce = new JCheckBox(myResources.getString("WallBouncingBehavior"));
+        addActionListenerForMenuItem(wallBounce, this, GUI_TOGGLE_BEHAVIOR, WALL_BOUNCE);
+        boxList.add(wallBounce);
+        JCheckBox wrapAround = new JCheckBox(myResources.getString("WrapAroundBehavior"));
+        addActionListenerForMenuItem(wrapAround, this, GUI_TOGGLE_BEHAVIOR, WRAP_AROUND);
+        boxList.add(wrapAround);
         
         for(JCheckBox j: boxList)
         {
@@ -519,6 +538,31 @@ public class Applet extends JApplet implements Constants
     	m.setIsPainting(true);
     	myCurrentID++;
 		return m;
+    }
+    
+    
+    /**
+     * Adds assembly of masses and springs based on information from the JMenuBar and sliders.
+     */
+    public void addAssembly()
+    {
+        Assembly parent = new Assembly("", null, myCurrentID);
+        myCurrentID++;
+        
+        Iterator<Point> iter = myPointList.iterator();
+        int numberOfItems = mySliderMap.get(MOVERS_LABEL).getValue() / 50;
+        for (int i = 0; i < numberOfItems; i ++)
+        {
+            Mass m = new Mass(iter.next(), new Dimension(mySliderMap.get(SIZE_LABEL).getValue(), mySliderMap.get(SIZE_LABEL).getValue()),
+                              myDisplay.nextIntInRange(0, 10), null, myCurrentID);
+            m.setIsPainting(true);
+            m.setBehaviors(myBehaviors);
+            parent.addMember(m);
+            myCurrentID++;
+        }
+        parent.addAllSprings();
+        myDisplay.getGroup().addMember(parent);
+        buildObjectTreeList();
     }
     
     /**

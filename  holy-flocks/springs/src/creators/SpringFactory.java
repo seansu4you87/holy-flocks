@@ -47,7 +47,6 @@ public class SpringFactory extends Factory implements Constants
                                           information.getBehaviors(),
                                           i));
         }
-        System.out.println(masses.get(0).getBehaviors());
         for (Mass m1: masses)
         {
             for (Mass m2: masses)

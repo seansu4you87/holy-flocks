@@ -62,6 +62,9 @@ public interface Constants
     public static final String GUI_CLEAR = "clearButtonAction";
     public static final String GUI_ADD_INDIVIDUAL = "addIndividualToGroup";
     public static final String GUI_ADD_GROUP = "addGroupToGroup";
+    
+    public static final String GUI_ADD_ASSEMBLY = "addAssembly";
+    
     public static final String GUI_MAKE_POINTS = "generateFormation";
     public static final String GUI_TOGGLE_BEHAVIOR = "toggleBehavior";
     public static final Dimension SIZE = new Dimension(600, 800);
@@ -87,6 +90,12 @@ public interface Constants
     public static final String STANDING_STILL = "StandingStill";
     public static final String SIMPLE_BOUNCE = "SimpleBouncing";
     public static final String ESCAPE_MOUSE = "EscapeTheMouse";
+    
+    public static final String SPRINGING = "Springing";
+    public static final String VISCOSITY = "Viscosity";
+    public static final String GRAVITY = "Gravity";
+    public static final String WALL_BOUNCE = "WallBounce";
+    public static final String WRAP_AROUND = "WrapAround";
     
     //Tree node names
     public static final String PARENT = "Parent ";

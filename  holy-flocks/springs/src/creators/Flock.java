@@ -229,7 +229,7 @@ public class Flock extends Group implements Constants
 			}
 			else //must be a flock
 			{
-				((Flock)i).update(canvas);
+				((Group)i).update(canvas);
 			}
 		}
 	}

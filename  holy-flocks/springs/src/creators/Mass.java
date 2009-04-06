@@ -5,12 +5,13 @@ import guiAndAbstracts.Image;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 import behaviorTypes.*;
 
 
 /**
  * 
- * @author Robert C. Duvall
+ * @author Robert C. Duvall, Sean Yu, Weiping Zhang
  */
 public class Mass extends Image
 {
@@ -18,6 +19,7 @@ public class Mass extends Image
     private Force myPreciseVelocity;
     private Force myForce;
     private double myMass;
+    private Random myGen = new Random();
 
 
     public Mass (Point center, Dimension size, double mass, Collection<Behavior> behaviors, int id)
@@ -25,48 +27,15 @@ public class Mass extends Image
         super(center, size, new Point(), "images/mass.gif", behaviors, id);
         myMass = mass;
         myForce = new Force();
-        myPreciseVelocity = new Force();
-        myBehaviors.add(new Springing());
+        myPreciseVelocity = new Force(myGen.nextInt(360), 1);
     }
 
-   /* public void update (Canvas canvas)
+    public void update (Canvas canvas)
     {
-        // add gravity towards bottom
-        myForce.add(GRAVITY);
-        myForce.scale(1.0 / myMass);
-        myPreciseVelocity.add(myForce);
-        myForce.reset();
-
-        // check for move out of bounds
-        Force impulse = new Force();
-        if (getLeft() < 0)
-        {
-            impulse = new Force(0, 2);
-            getCenter().x = getSize().width / 2;
-        }
-        else if (getRight() > canvas.getSize().width)
-        {
-            impulse = new Force(180, 2);
-            getCenter().x = canvas.getSize().width - getSize().width / 2;
-        }
-        if (getTop() < 0)
-        {
-            impulse = new Force(270, 2);
-            getCenter().y = getSize().height / 2;
-        }
-        else if (getBottom() > canvas.getSize().height)
-        {
-            impulse = new Force(90, 2);
-            getCenter().y = canvas.getSize().height - getSize().height / 2;
-        }
-        impulse.scale(myPreciseVelocity.getRelativeMagnitude(impulse));
-        myPreciseVelocity.add(impulse);
-
-        // convert force back into Mover's velocity
         setVelocity((int)Math.round(myPreciseVelocity.getXChange()),
                     (int)Math.round(myPreciseVelocity.getYChange()));
         super.update(canvas);
-    }*/
+    }
     
     public Force getForce()
     {
@@ -76,6 +45,11 @@ public class Mass extends Image
     public Force getPreciseVelocity()
     {
         return myPreciseVelocity;
+    }
+    
+    public void setPreciseVelocity(Force newPreciseVelocity)
+    {
+        myPreciseVelocity = newPreciseVelocity;
     }
     
     public double getMass()
