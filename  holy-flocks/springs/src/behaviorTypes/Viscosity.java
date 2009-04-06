@@ -24,7 +24,5 @@ public class Viscosity implements Behavior
         mass.getPreciseVelocity().add(opposite);
         m.getVelocity().x = (int)Math.round(mass.getPreciseVelocity().getXChange());
         m.getVelocity().y = (int)Math.round(mass.getPreciseVelocity().getYChange());
-        
     }
-
 }
