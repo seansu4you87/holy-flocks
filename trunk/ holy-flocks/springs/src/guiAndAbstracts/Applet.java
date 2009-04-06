@@ -320,9 +320,9 @@ public class Applet extends JApplet implements Constants
         JCheckBox wallBounce = new JCheckBox(myResources.getString("WallBouncingBehavior"));
         addActionListenerForMenuItem(wallBounce, this, GUI_TOGGLE_BEHAVIOR, WALL_BOUNCE);
         boxList.add(wallBounce);
-        JCheckBox wrapAround = new JCheckBox(myResources.getString("WrapAroundBehavior"));
-        addActionListenerForMenuItem(wrapAround, this, GUI_TOGGLE_BEHAVIOR, WRAP_AROUND);
-        boxList.add(wrapAround);
+        //JCheckBox wrapAround = new JCheckBox(myResources.getString("WrapAroundBehavior"));
+        //addActionListenerForMenuItem(wrapAround, this, GUI_TOGGLE_BEHAVIOR, WRAP_AROUND);
+        //boxList.add(wrapAround);
         
         for(JCheckBox j: boxList)
         {
